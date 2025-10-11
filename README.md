@@ -1,4 +1,4 @@
-# 📦 ¿Qué es esto? ¡Descomprime tus archivos con un solo clic! 😊
+# 📦 ¿Qué es esto? ¡Descomprime tus archivos con un solo clic! 
 
 **Hola, Tete.**  
 Mira, te lo explico **como si nunca hubieras usado un ordenador**:  
