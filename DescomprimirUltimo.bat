@@ -68,7 +68,7 @@ if defined FILE_EXT_LOW (
         set "FILE_EXT_LOW=!FILE_EXT_LOW:%%C=%%C!"
     )
     :: Ahora usamos PowerShell para convertir a minúsculas de forma confiable
-    for /f "delims=" %%L in ('powershell -nologo -noprofile "''!FILE_EXT!'' -replace '.*', (''!FILE_EXT!'' -replace '.*', '''').ToLower()" 2^>nul') do set "FILE_EXT_LOW=%%L"
+    for /f "delims=" %%L in ('powershell -nologo -noprofile -command "''!FILE_EXT!''.ToLower()" 2^>nul') do set "FILE_EXT_LOW=%%L"
 )
 
 :: Soporte básico para .tar.gz (trata como .tar)
