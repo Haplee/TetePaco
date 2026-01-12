@@ -1,156 +1,140 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Configurar codificación UTF-8 para soportar acentos y emojis (requiere consola moderna)
+:: ==============================================================================
+:: 📥 Descomprimir Último Archivo - Especial para Paco Mateo
+:: ==============================================================================
+:: Función: Busca el archivo comprimido más reciente en "Descargas", lo
+::          descomprime en una carpeta nueva y la abre automáticamente.
+:: ==============================================================================
+
+:: Configurar codificación UTF-8 para soportar acentos y emojis
 chcp 65001 >nul 2>&1
 
 :: --- CONFIGURACIÓN ---
 set "DOWNLOADS_FOLDER=%USERPROFILE%\Downloads"
 set "SCRIPT_NAME=Descomprimir Último Archivo"
+set "VERSION=1.1"
 
 :: --- INICIO ---
-title %SCRIPT_NAME% 📦
+title %SCRIPT_NAME% v%VERSION% 📦
+color 0F
 cls
+
 echo.
-echo 📥 %SCRIPT_NAME%
-echo =============================================
-echo Buscando el archivo .zip, .ZIP, .tar o .TAR mas reciente en:
-echo "%DOWNLOADS_FOLDER%"
+echo   ╔══════════════════════════════════════════════════════╗
+echo   ║         📦 DESCOMPRIMIR ÚLTIMO ARCHIVO               ║
+echo   ║           (Especial para Paco Mateo)                 ║
+echo   ╚══════════════════════════════════════════════════════╝
+echo.
+echo   🔍 Buscando el archivo más reciente en:
+echo      "%DOWNLOADS_FOLDER%"
 echo.
 
-:: Verificar que la carpeta de Descargas exista
+:: 1. Verificar que la carpeta de Descargas exista
 if not exist "%DOWNLOADS_FOLDER%" (
-    echo ❌ ERROR: No se encuentra la carpeta de Descargas.
-    echo    Ruta: "%DOWNLOADS_FOLDER%"
+    echo   ❌ [ERROR] No se encuentra la carpeta de Descargas.
+    echo      Ruta buscada: "%DOWNLOADS_FOLDER%"
     goto :final_error
 )
 
-:: Cambiar al directorio de Descargas
+:: 2. Cambiar al directorio de Descargas
 pushd "%DOWNLOADS_FOLDER%" || (
-    echo ❌ ERROR: No se pudo acceder a la carpeta de Descargas.
+    echo   ❌ [ERROR] No se pudo acceder a la carpeta de Descargas.
     goto :final_error
 )
 
-:: Buscar el archivo comprimido más reciente (.zip o .tar, en cualquier combinación de mayúsculas)
+:: 3. Buscar el archivo comprimido más reciente (.zip, .tar, .tgz, .tar.gz)
 set "LATEST_FILE="
-for /f "delims=" %%F in ('dir /b /o-d /a-d *.zip *.ZIP *.tar *.TAR 2^>nul') do (
-    set "LATEST_FILE=%%F"
-    goto :found_file
+for /f "delims=" %%F in ('dir /b /o-d /a-d *.zip *.tar *.tgz *.gz 2^>nul') do (
+    :: Filtro manual para asegurar que es un archivo comprimido válido
+    set "TEMP_FILE=%%F"
+    if "!TEMP_FILE:~-4!"==".zip" set "LATEST_FILE=%%F" & goto :found_file
+    if "!TEMP_FILE:~-4!"==".tar" set "LATEST_FILE=%%F" & goto :found_file
+    if "!TEMP_FILE:~-4!"==".tgz" set "LATEST_FILE=%%F" & goto :found_file
+    if "!TEMP_FILE:~-7!"==".tar.gz" set "LATEST_FILE=%%F" & goto :found_file
 )
 
-echo ⚠️ No se encontraron archivos .zip ni .tar en tu carpeta de Descargas.
-echo    Asegúrate de que el archivo esté en:
-echo    "%DOWNLOADS_FOLDER%"
+echo   ⚠️ No se encontraron archivos .zip o .tar en "Descargas".
+echo   Asegúrate de que el archivo que quieres abrir esté allí.
 goto :final_normal
 
 :found_file
-echo ✅ ¡Archivo encontrado!: "!LATEST_FILE!"
+echo   ✅ ¡Encontrado!: "!LATEST_FILE!"
+echo.
 
-:: --- Determinar extensión real (últimos 3 o 4 caracteres) ---
-set "FILE_NAME=!LATEST_FILE!"
-set "FILE_EXT="
-
-:: Extraer extensión de forma segura (soporta nombres con puntos)
+:: 4. Preparar nombre de la carpeta de destino
 for %%A in ("!LATEST_FILE!") do (
-    set "FILE_NAME=%%~nA"
+    set "BASE_NAME=%%~nA"
     set "FILE_EXT=%%~xA"
 )
 
-:: Normalizar extensión a minúsculas
-set "FILE_EXT=!FILE_EXT:~1!" &:: Quita el punto inicial
-set "FILE_EXT_LOW=!FILE_EXT!"
-if defined FILE_EXT_LOW (
-    for %%L in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do (
-        set "FILE_EXT_LOW=!FILE_EXT_LOW:%%L=%%L!"
-    )
-    :: Convertir a minúsculas (truco simple)
-    for %%C in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
-        set "FILE_EXT_LOW=!FILE_EXT_LOW:%%C=%%C!"
-    )
-    :: Ahora usamos PowerShell para convertir a minúsculas de forma confiable
-    for /f "delims=" %%L in ('powershell -nologo -noprofile "''!FILE_EXT!'' -replace '.*', (''!FILE_EXT!'' -replace '.*', '''').ToLower()" 2^>nul') do set "FILE_EXT_LOW=%%L"
+:: Caso especial para .tar.gz (quita el .tar si existe)
+if /i "!FILE_EXT!"==".gz" (
+    set "BASE_NAME=!BASE_NAME:.tar=!"
 )
 
-:: Soporte básico para .tar.gz (trata como .tar)
-if /i "!FILE_EXT!"=="gz" (
-    :: Verificar si el nombre termina en .tar.gz
-    echo !LATEST_FILE! | findstr /i /r "\.tar\.gz$" >nul && (
-        set "FILE_EXT_LOW=tar"
-        set "FILE_NAME=!FILE_NAME:~0,-4!" &:: Quita ".tar" del nombre base
-    )
-)
+set "DEST_FOLDER=Contenido_de_!BASE_NAME!"
+:: Limpiar caracteres extraños del nombre de la carpeta si los hubiera
+set "DEST_FOLDER=!DEST_FOLDER::=!"
+set "DEST_FOLDER=!DEST_FOLDER:/=!"
 
-:: Validar extensión soportada
-if /i not "!FILE_EXT_LOW!"=="zip" if /i not "!FILE_EXT_LOW!"=="tar" (
-    echo ❌ ERROR: Extensión no soportada: ".!FILE_EXT!"
-    echo    Solo se admiten .zip y .tar (incluyendo .tar.gz).
-    goto :final_error
-)
+echo   📁 Se extraerá en: "!DEST_FOLDER!"
 
-:: --- Carpeta de destino ---
-set "DEST_FOLDER=Contenido_de_!FILE_NAME!"
-if "!DEST_FOLDER:~-1!"=="." set "DEST_FOLDER=!DEST_FOLDER:~0,-1!"
-
-echo 📁 Carpeta de destino: "!DEST_FOLDER!"
-
-:: Eliminar carpeta anterior si existe
+:: 5. Gestionar carpeta de destino existente
 if exist "!DEST_FOLDER!\" (
-    echo 🗑️ Eliminando carpeta anterior para evitar archivos mezclados...
+    echo   🗑️  Limpiando carpeta anterior...
     rd /s /q "!DEST_FOLDER!" 2>nul
-    if exist "!DEST_FOLDER!\" (
-        echo ❌ ERROR: No se pudo eliminar la carpeta anterior.
-        goto :final_error
-    )
 )
 
-:: Crear nueva carpeta
 mkdir "!DEST_FOLDER!" 2>nul
 if not exist "!DEST_FOLDER!\" (
-    echo ❌ ERROR: No se pudo crear la carpeta de destino.
+    echo   ❌ [ERROR] No se pudo crear la carpeta de destino.
     goto :final_error
 )
 
-:: --- Descomprimir ---
-echo ⚙️ Descomprimiendo...
-if /i "!FILE_EXT_LOW!"=="zip" (
-    powershell -nologo -noprofile -command "try { Expand-Archive -Path '!LATEST_FILE!' -DestinationPath '!DEST_FOLDER!' -Force -ErrorAction Stop } catch { exit 1 }"
-) else if /i "!FILE_EXT_LOW!"=="tar" (
-    tar -xf "!LATEST_FILE!" -C "!DEST_FOLDER!" 2>nul
+:: 6. Proceso de descompresión
+echo   ⚙️  Descomprimiendo archivos... por favor espera...
+
+:: Usamos PowerShell por ser lo más robusto en Windows 10/11
+if /i "!FILE_EXT!"==".zip" (
+    powershell -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; try { [System.IO.Compression.ZipFile]::ExtractToDirectory('!LATEST_FILE!', '!DEST_FOLDER!') } catch { Expand-Archive -Path '!LATEST_FILE!' -DestinationPath '!DEST_FOLDER!' -Force } }" >nul 2>&1
+) else (
+    :: Para .tar, .tgz, .tar.gz usamos el comando 'tar' de Windows
+    tar -xf "!LATEST_FILE!" -C "!DEST_FOLDER!" >nul 2>&1
 )
 
 if errorlevel 1 (
-    echo ❌ ERROR: Falló la descompresión.
-    echo    - El archivo podría estar dañado.
-    echo    - Podría estar en uso por otro programa.
-    echo    - O no tienes permisos suficientes.
+    echo   ❌ [ERROR] Falló la descompresión.
+    echo      - Comprueba si el archivo está corrupto.
+    echo      - Comprueba si el archivo está abierto en otro programa.
     goto :final_error
 )
 
-:: Verificar que la carpeta no esté vacía
-dir /a /b "!DEST_FOLDER!" >nul 2>&1
-if errorlevel 1 (
-    echo ⚠️ AVISO: El archivo se descomprimió, pero no contiene nada visible.
-)
-
-:: --- Éxito ---
+:: 7. Finalización exitosa
+echo   ✨ ¡TODO LISTO, PACO!
 echo.
-echo ✨ ¡Todo listo! Tus archivos están en:
-echo "!DEST_FOLDER!"
-echo.
-echo 🪟 Abriendo carpeta...
+echo   🪟 Abriendo la carpeta con tus archivos...
 explorer "!DEST_FOLDER!"
+
+:: Sonido de notificación simple (opcional, Paco lo agradecerá)
+powershell -c "[console]::beep(1000, 200)" >nul 2>&1
+
 timeout /t 3 /nobreak >nul
 goto :end
 
 :final_error
 echo.
-echo Presiona cualquier tecla para cerrar...
+echo   ❌ Ha ocurrido un problema. 
+echo   Repasa los avisos de arriba.
+echo.
+echo   Presiona cualquier tecla para cerrar...
 pause >nul
 goto :end
 
 :final_normal
 echo.
-echo Presiona cualquier tecla para cerrar...
+echo   Presiona cualquier tecla para salir...
 pause >nul
 
 :end

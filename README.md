@@ -1,90 +1,53 @@
-# 📦 ¿Qué es esto? ¡Descomprime tus archivos con un solo clic! 
+# 📥 Asistente de Descompresión para Paco Mateo
 
-**Hola, Tete.**  
-Mira, te lo explico **como si nunca hubieras usado un ordenador**:  
-Este programita **hace todo el trabajo por ti** para abrir esos archivos raros que terminan en `.zip` o `.tar` (¡sí, esos que descargas y no sabes cómo ver lo de dentro!).  
-**Solo tienes que hacer doble clic en él… ¡y ya está!** 💻✨
-
----
-
-## ✅ ¿Qué hace, exactamente? (en palabras de verdad)
-
-Imagina que acabas de descargar un archivo llamado `fotos_viaje.zip`.  
-Este programita hace lo siguiente **solo y sin que tú hagas nada**:
-
-1. 🔍 **Busca** en tu carpeta de **Descargas** el archivo `.zip` o `.tar` **más nuevo** (el último que descargaste).
-2. 📁 **Crea una carpeta nueva** con un nombre como: `Contenido_de_fotos_viaje.zip`.
-3. 📤 **Saca todos los archivos** que están dentro del `.zip` o `.tar` y los pone **dentro de esa carpeta nueva**.
-4. 🪟 **Abre esa carpeta automáticamente** para que veas tus fotos, documentos o lo que sea… ¡ya listos para usar!
-5. 💬 **Te va contando** lo que hace con mensajitos fáciles (y hasta con caritas 😊).
-
-> 🎯 **En resumen**: tú descargas un archivo comprimido → haces doble clic en este programita → y ¡listo! Tus archivos aparecen solos, sin complicaciones.
+**¡Hola, Paco!**  
+Este es tu asistente personal para abrir esos archivos "raros" (.zip, .tar, .tgz) que te mandan por correo o descargas de internet.  
+**Olvídate de buscar aplicaciones o pelearte con Windows: un doble clic y listo.** 🚀
 
 ---
 
-## 🖥️ ¿Qué necesitas para que funcione?
+## ✨ ¿Qué hace este programa?
 
-Solo dos cosas muy sencillas:
+Imagina que acabas de descargar unos planos o un firmware. En lugar de buscar dónde se guardaron y cómo abrirlos, el asistente lo hace por ti:
 
-- Tener **Windows 10 o Windows 11** (la mayoría de los ordenadores nuevos lo tienen).  
-  *(Si no sabes qué Windows tienes, no te preocupes: si tu ordenador es de los últimos 5 años, probablemente sí sirva).*
-- Que el archivo `.zip` o `.tar` **esté en tu carpeta de Descargas** (esa donde van a parar las cosas que bajas de internet).
-
-> ❌ **No funciona** en ordenadores muy antiguos (como con Windows 7 u 8).
-
----
-
-## 🚀 ¿Cómo se usa? (paso a paso, como si nunca lo hubieras hecho)
-
-Sigue estos pasos **tal cual**:
-
-1. **Guarda** este archivo (`DescomprimirUltimo.bat`) en tu **escritorio** (es lo más fácil).
-2. **Descarga** tu archivo `.zip` o `.tar` (por ejemplo, desde un correo o una web).  
-   → *Esto lo hace tu navegador, y normalmente va a la carpeta **Descargas**.*
-3. **Ve a tu escritorio** y **haz doble clic** en el icono de `DescomprimirUltimo.bat`.  
-   → *Verás una ventanita negra que aparece y desaparece… ¡es normal!*
-4. **Espera 2 o 3 segundos**…  
-5. 🎉 ¡**Se abrirá una carpeta nueva** con todos tus archivos listos para usar!
+1.  🔍 **Busca** el último archivo comprimido en tu carpeta de **Descargas**.
+2.  📁 **Crea una carpeta nueva** con el nombre del archivo para que todo esté ordenado.
+3.  📤 **Extrae el contenido** automáticamente dentro de esa carpeta.
+4.  🪟 **Abre la carpeta** frente a tus ojos para que empieces a trabajar de inmediato.
+5.  🎵 **Te avisa con un sonido** cuando ha terminado.
 
 ---
 
-## ⚠️ ¿Qué pasa si veo un mensaje de advertencia?
+## 🚀 Cómo usarlo (Paso a paso)
 
-A veces, **la primera vez**, Windows dice:
-
-> ❗ *"Windows protegió tu PC"*  
-> *"Este archivo no es habitual..."*
-
-**¡No pasa nada!** Solo haz esto:
-
-1. Haz clic en **"Más información"** (abajo del mensaje).
-2. Luego haz clic en **"Ejecutar de todas formas"**.  
-   → *Es seguro, porque este programa solo trabaja con tus propios archivos.*
-
-> 🔒 **Importante**: Este programita **NO envía nada a internet**, **NO borra nada importante** y **solo toca tu carpeta de Descargas**.
+1.  **Descarga el archivo** `DescomprimirUltimo.bat`.
+2.  **Guárdalo en tu Escritorio** (es el sitio más cómodo).
+3.  **Descarga lo que necesites** de internet (el archivo .zip).
+4.  **Haz DOBLE CLIC** en el icono del asistente en tu escritorio.
+5.  🎉 **¡Hecho!** Se abrirá una ventana con tus archivos listos.
 
 ---
 
-## 🛠️ ¿Y si no funciona?
+## ⚠️ Sobre el aviso de seguridad
 
-No te preocupes. Prueba esto:
+Como este es un programa directo ("script"), Windows puede ser un poco precavido la primera vez:
 
-- ¿El archivo `.zip` o `.tar` está en **Descargas**?  
-  → Si lo guardaste en otro sitio (como el Escritorio), **muévelo a Descargas**.
-- ¿Tu Windows está muy desactualizado?  
-  → Ve a **Inicio → Configuración → Actualización y seguridad** y haz clic en "Buscar actualizaciones".
-- ¿Tu antivirus lo bloquea?  
-  → Si confías en este archivo, dile a tu antivirus que **lo permita** (normalmente hay un botón como "Permitir" o "Confío en este archivo").
+1.  Si sale una ventana azul diciendo *"Windows protegió su PC"*, haz clic en **"Más información"**.
+2.  Luego pulsa el botón **"Ejecutar de todas formas"**.
+
+> 🔒 **Es 100% seguro.** No se conecta a internet, no borra nada y solo trabaja con tus archivos descargados.
 
 ---
 
-## 💡 Consejo extra
-
-Puedes **dejar este programita siempre en el escritorio**.  
-Así, cada vez que descargues un `.zip` o `.tar`, solo tienes que **hacer doble clic**… ¡y ya!
+## 🛠️ Requisitos
+*   **Windows 10 o 11**.
+*   Que el archivo comprimido esté en la carpeta **Descargas**.
 
 ---
 
-### ❤️ Hecho con cariño para ti  
-**Sin tecnicismos. Sin miedos. Sin complicaciones.**  
-¡Ahora tus archivos comprimidos ya no serán un misterio! 🎁
+### ❤️ Hecho para un experto
+*Para quien entiende de circuitos, resistencias y voltios... ¡pero no tiene por qué perder el tiempo con carpetas de Windows!*
+
+---
+© 2025 - **Tete Paco Project**
+

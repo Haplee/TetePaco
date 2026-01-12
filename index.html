@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <title>Programa para Paco Mateo</title>
+  <link rel="icon" type="image/png" href="logo-paco.png" />
+  <title>Asistente Paco Mateo - Descompresor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== ACCESIBILIDAD + CONFORT VISUAL ===== */
     :root {
-      --font-size-base: 1.25rem; /* 20px */
-      --font-size-lg: 1.5rem;    /* 24px */
-      --font-size-xl: 1.875rem;  /* 30px */
-      --font-size-xxl: 2.25rem;  /* 36px */
-      --line-height: 1.6;
-      --spacing: 1.5rem;
-      --border-radius: 12px;
-      
-      /* Blanco roto suave (tipo papel o pergamino) */
-      --color-bg: #faf9f6;
-      --color-text: #2d2b2b;
-      
-      --color-accent: #4a6fa5;
-      --color-success: #2e7d32;
-      --color-warning: #e65100;
-      --color-error: #c62828;
-      --color-light: #f0f4f8;
-      --color-electronic: #b71c1c;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-paco: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -35,254 +31,327 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: var(--font-size-base);
-      line-height: var(--line-height);
-      color: var(--color-text);
-      background-color: var(--color-bg);
-      padding: 1.5rem;
-      max-width: 900px;
-      margin: 0 auto;
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem;
     }
 
-    @media (max-width: 600px) {
-      body {
-        font-size: var(--font-size-lg);
-        padding: 1.25rem;
-      }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     header {
       text-align: center;
-      margin-bottom: var(--spacing);
-      padding: 1.5rem 0;
-      border-bottom: 3px solid var(--color-accent);
+      margin-bottom: 3rem;
+      animation: fadeInDown 0.8s ease;
     }
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1.25rem;
+    .logo-glow {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-glow::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: var(--primary);
+      filter: blur(40px);
+      opacity: 0.2;
+      z-index: -1;
     }
 
     .logo {
-      width: 160px;
+      width: 140px;
       height: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--glass-border);
     }
 
     h1 {
-      font-size: var(--font-size-xxl);
-      margin-bottom: 0.75rem;
-      color: var(--color-accent);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      background: linear-gradient(to right, #fff, var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
     }
 
     .subtitle {
-      font-size: var(--font-size-lg);
-      color: #555;
+      color: var(--text-muted);
+      font-size: 1.2rem;
     }
 
-    .card {
-      background: var(--color-light);
-      border-left: 5px solid var(--color-accent);
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
     }
 
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
 
-    .for-paco {
-      border-left-color: var(--color-electronic) !important;
-      background-color: #fff5f5;
+    .card-paco {
+      border-left: 4px solid var(--accent-paco);
+      background: linear-gradient(to right, rgba(239, 68, 68, 0.05), var(--card-bg));
     }
 
-    .for-paco h2 {
-      color: var(--color-electronic);
+    .card-success {
+      border-left: 4px solid var(--success);
+    }
+
+    .card-warning {
+      border-left: 4px solid var(--warning);
     }
 
     h2 {
-      font-size: var(--font-size-xl);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: #fff;
+    }
+
+    .emoji-bg {
+      background: rgba(255, 255, 255, 0.1);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 1.2rem;
+    }
+
+    p {
       margin-bottom: 1rem;
-      color: var(--color-accent);
+      color: var(--text-muted);
     }
 
-    ul, ol {
-      padding-left: 1.75rem;
-      margin: 1rem 0;
+    strong {
+      color: var(--text-main);
+      font-weight: 600;
     }
 
-    li {
-      margin-bottom: 0.75rem;
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
     }
 
-    .emoji {
-      font-size: 1.4em;
-      vertical-align: middle;
-      margin-right: 8px;
+    .step-list li {
+      counter-increment: step-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+    }
+
+    .step-list li::before {
+      content: counter(step-counter);
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 0.9rem;
     }
 
     .highlight {
-      background-color: #e6f0fa;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      font-family: monospace;
-      font-weight: bold;
-      color: var(--color-accent);
+      background: rgba(79, 70, 229, 0.2);
+      color: #a5b4fc;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 600;
     }
 
-    .warning {
-      background-color: #fff8e1;
-      border-left-color: var(--color-warning);
-    }
-
-    .success {
-      border-left-color: var(--color-success);
-      background-color: #f1f8e9;
-    }
-
-    .footer {
+    .btn-container {
       text-align: center;
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
-      border-top: 2px dashed #d0d0d0;
-      color: #666;
-      font-size: var(--font-size-base);
+      margin-top: 3rem;
     }
 
-    .btn {
-      display: inline-block;
-      background: var(--color-accent);
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--primary);
       color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 50px;
+      padding: 1rem 2.5rem;
+      border-radius: 100px;
       text-decoration: none;
-      font-weight: bold;
-      margin-top: 1rem;
-      font-size: var(--font-size-lg);
-      transition: background 0.3s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-download:hover {
+      background: var(--primary-hover);
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+    }
+
+    footer {
       text-align: center;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
     }
 
-    .btn:hover {
-      background: #3a5a80;
-      transform: translateY(-2px);
-    }
-
-    /* Animaciones suaves */
-    @keyframes fadeInUp {
+    /* Animations */
+    @keyframes fadeInDown {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-30px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    .card {
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-    .card:nth-child(4) { animation-delay: 0.4s; }
-    .card:nth-child(5) { animation-delay: 0.5s; }
-    .card:nth-child(6) { animation-delay: 0.6s; }
+    .glass-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .glass-card:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .glass-card:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .glass-card:nth-child(4) {
+      animation-delay: 0.5s;
+    }
+
+    .glass-card:nth-child(5) {
+      animation-delay: 0.6s;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+
+      .glass-card {
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <header>
-    <div class="logo-container">
-        <img 
-            src="logo-paco.png" 
-            alt="Logo de Paco Mateo - EA" 
-            class="logo"
-        />
+  <div class="container">
+    <header>
+      <div class="logo-glow">
+        <img src="logo-paco.png" alt="Logo Paco" class="logo" />
+      </div>
+      <h1>Asistente Paco Mateo</h1>
+      <p class="subtitle">Herramientas simples para un experto en electrónica</p>
+    </header>
+
+    <div class="glass-card card-paco">
+      <h2>
+        <div class="emoji-bg">👨‍🔧</div> ¡Hola, Paco!
+      </h2>
+      <p>Tú dominas los <strong>circuitos y los voltios</strong>, así que deja que este programa se encargue de "los
+        trastos" de Windows por ti.</p>
+      <p>Es un asitente automático: tú haces <strong>doble clic</strong> y él saca los archivos de cualquier caja (.zip)
+        que te manden por email.</p>
     </div>
-    <h1>📦 Descomprimir Último Archivo</h1>
-    <p class="subtitle">¡Haz doble clic y listo! Especialmente para ti, Paco Mateo.</p>
-  </header>
 
-  <div class="card for-paco">
-    <h2><span class="emoji">👨‍🔧</span>¡Hola, Paco Mateo!</h2>
-    <p>
-      Sabemos que tú entiendes de <strong>resistencias, circuitos, soldaduras y microcontroladores</strong>… ¡y eso es mucho más complicado que esto!
-    </p>
-    <p>
-      Este pequeño programa es como un “<strong>asistente automático</strong>” para Windows: hace por ti lo que Windows no hace solo: <strong>abrir esos archivos comprimidos (.zip o .tar) que te mandan por email o descargas de internet</strong>.
-    </p>
-    <p>
-      Piensa en ello como un <em>“descompresor automático”</em>: tú das la orden (doble clic), y él saca los archivos, igual que tú sacarías un componente de su caja protectora.
-    </p>
-  </div>
+    <div class="glass-card">
+      <h2>
+        <div class="emoji-bg">⚡</div> ¿Cómo funciona?
+      </h2>
+      <p>Busca en tu carpeta de <strong>Descargas</strong> el último archivo que has bajado y lo prepara todo en una
+        carpeta nueva.</p>
+      <ul class="step-list">
+        <li><strong>Ten el archivo listo:</strong> Descarga el .zip o .tar de tu correo.</li>
+        <li><strong>Ejecuta el asistente:</strong> Haz doble clic en <span
+            class="highlight">DescomprimirUltimo.bat</span>.</li>
+        <li><strong>¡Listo!:</strong> Se abrirá la carpeta con tus archivos automáticamente.</li>
+      </ul>
+    </div>
 
-  <div class="card">
-    <h2><span class="emoji">✅</span>¿Qué hace este programa?</h2>
-    <p>
-      Busca en tu carpeta de <strong>Descargas</strong> el archivo <span class="highlight">.zip</span> o <span class="highlight">.tar</span> más reciente y lo descomprime en una carpeta nueva.
-    </p>
-    <p>
-      Luego, <strong>te abre esa carpeta automáticamente</strong>, como si te entregara los componentes listos para usar en tu banco de trabajo.
-    </p>
-  </div>
+    <div class="glass-card card-warning">
+      <h2>
+        <div class="emoji-bg">⚠️</div> ¿Aviso de Seguridad?
+      </h2>
+      <p>Al ser un programa creado a medida, Windows puede preguntar si es seguro.</p>
+      <p>Solo tienes que pulsar <strong>"Más información"</strong> y luego <strong>"Ejecutar de todas formas"</strong>.
+        Es 100% seguro y no necesita internet.</p>
+    </div>
 
-  <div class="card">
-    <h2><span class="emoji">⚡</span>¿Cómo se usa? (3 pasos)</h2>
-    <ol>
-      <li>Guarda el archivo <span class="highlight">DescomprimirUltimo.bat</span> en tu escritorio.</li>
-      <li>Descarga un archivo <span class="highlight">.zip</span> o <span class="highlight">.tar</span> (ej: planos, firmware, esquemáticos).</li>
-      <li>Haz <strong>doble clic</strong> en el archivo del escritorio → ¡y listo!</li>
-    </ol>
-  </div>
+    <div class="glass-card card-success">
+      <h2>
+        <div class="emoji-bg">💎</div> Ventajas
+      </h2>
+      <p>✅ <strong>Sin instalar nada:</strong> Es un archivo pequeño que hace el trabajo.</p>
+      <p>✅ <strong>Orden automático:</strong> Crea carpetas limpias para no mezclar archivos.</p>
+      <p>✅ <strong>Ahorro de tiempo:</strong> Ideal para esquemas y manuales de componentes.</p>
+    </div>
 
-  <div class="card warning">
-    <h2><span class="emoji">⚠️</span>¿Aviso de Windows?</h2>
-    <p>
-      La primera vez, puede salir: <em>“Windows protegió tu PC”</em>.
-    </p>
-    <p>
-      Haz clic en <strong>“Más información”</strong> → luego en <strong>“Ejecutar de todas formas”</strong>.
-    </p>
-    <p>
-      <strong>Es 100% seguro</strong>: no se conecta a internet, no toca tus proyectos, y solo trabaja en la carpeta de Descargas.
-    </p>
-  </div>
+    <div class="btn-container">
+      <a href="DescomprimirUltimo.bat" download class="btn-download">
+        <span>📥 Descargar Asistente</span>
+      </a>
+      <p style="margin-top: 1rem; font-size: 0.85rem;">Guárdalo en tu Escritorio para tenerlo siempre a mano</p>
+    </div>
 
-  <div class="card">
-    <h2><span class="emoji">💻</span>Requisitos</h2>
-    <ul>
-      <li><strong>Windows 10 o 11</strong> (como los ordenadores nuevos).</li>
-      <li>El archivo comprimido debe estar en <strong>Descargas</strong>.</li>
-    </ul>
-    <p><em>❌ No funciona en Windows 7 u 8.</em></p>
-  </div>
-
-  <div class="card success">
-    <h2><span class="emoji">❤️</span>Hecho con admiración</h2>
-    <p>
-      Para Paco Mateo: un experto en electrónica que merece herramientas simples para lo que no es su mundo.
-    </p>
-    <p>
-      ¡Ahora puedes abrir esos archivos comprimidos tan fácil como encender una fuente de alimentación!
-    </p>
-  </div>
-
-  <div class="footer">
-    <p>Programa gratuito • Sin conexión a internet • Solo para tu uso personal</p>
-    <p>© 2025 • Con cariño, para quien entiende de electrones… ¡no de Windows!</p>
+    <footer>
+      <p>© 2025 • Hecho con cariño para Paco Mateo</p>
+      <p>Porque los electrones son más divertidos que las carpetas.</p>
+    </footer>
   </div>
 
 </body>
+
 </html>
